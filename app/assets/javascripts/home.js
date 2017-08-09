@@ -1,2 +1,6 @@
-console.log($);
-console.log('hello')
+new Vue({
+    el: '#app',
+    mounted () {
+        console.log('Hello World');
+    }
+});
