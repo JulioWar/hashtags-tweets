@@ -25,12 +25,19 @@ document.addEventListener('turbolinks:load', () => {
         },
 
         watch: {
-            /*
-                funcion que escucha cualquier cambio en en la variable selection
-                y quita los espacios
-             */
+            // Funcion que escucha cualquier cambio en en la variable selection
+            // y quita los espacios
             selection() {
                 this.selection = this.selection.replace(/\s+/g, '');
+            },
+        },
+        computed:  {
+            // Funcion que devuelve todos los hastag ordenados descendentemente
+            // por aparicion
+            hashtagsOrdered() {
+                return this.hashtags.sort((a, b) => {
+                    return b.count - a.count;
+                });
             }
         },
         methods: {
