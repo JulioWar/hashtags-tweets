@@ -3,7 +3,7 @@
 ### INSTALACION
 Primero se deben instalar las dependencias utilizando el comando siguiente:
 ```
-bundle install1
+bundle install
 ```
 
 Luego debe correr las migraciones:
