@@ -2,6 +2,7 @@
 
 document.addEventListener('turbolinks:load', () => {
     var element = document.getElementById('app');
+    Vue.http.headers.common['X-CSRF-TOKEN'] =  $('meta[name=csrf-token]').attr('content');
     new Vue({
         el: element,
         data() {
@@ -11,6 +12,7 @@ document.addEventListener('turbolinks:load', () => {
                 message: '',
                 alert: false,
                 processing: false,
+                loading: false,
                 previousRequest: null,
                 hashtags: [],
             };
@@ -24,14 +26,11 @@ document.addEventListener('turbolinks:load', () => {
             closeAlert() {
                 this.alert = false;
             },
-            removeHashtag() {
-                this.$http.delete(this.url.)
-            },
             enter() {
                 if (!this.selection) return;
 
                 this.processing = true;
-                this.$http.get(this.hashtag + '?q=' + this.selection, {
+                this.$http.post(this.url, { q: this.selection }, {
                         before(request) {
                             if (this.previousRequest) {
                                 this.previousRequest.abort();
@@ -49,21 +48,58 @@ document.addEventListener('turbolinks:load', () => {
                             this.processing = false;
                         },
                         (response) => {
-                            const body = response.body;
-                            if (body.message) {
-                                this.message = body.message;
-                            } else {
-                                this.message = response.statusText;
-                            }
+                            this.showAlert(response);
                             this.alert = true;
                             this.processing = false;
+                        }
+                    );
+            },
+            removeHashtag(hashtag) {
+
+                if (hashtag.disabled) return;
+
+                hashtag.disabled = true;
+                this.$http.delete(this.url + '/' + hashtag.id)
+                    .then(
+                        () => {
+                            this.hashtags = this.hashtags.filter((item) => {
+                                return item.id !== hashtag.id;
+                            });
+                        },
+                        (response) => {
+                            this.showAlert(response);
+                            hashtag.disabled = false;
+                        }
+                    );
+            },
+            showAlert(response) {
+                if(response.status === 0) return;
+
+                const body = response.body;
+                if (body.message) {
+                    this.message = body.message;
+                } else {
+                    this.message = response.statusText;
+                }
+            },
+            refreshHashtags() {
+                this.loading = true;
+                this.$http.get(this.url)
+                    .then(
+                        (response) => {
+                            this.hashtags = response.data;
+                            this.loading = false;
+                        },
+                        (response) => {
+                            this.showAlert(response);
+                            this.loading = false;
                         }
                     );
             }
 
         },
         mounted() {
-            console.log('Hello World', this );
+            this.refreshHashtags();
         }
     });
 

@@ -18,15 +18,30 @@ class HomeController < ApplicationController
     end
 
     def all
-        
+        render :json => Hashtag.all
     end
 
     def add
         begin
-            logger.debug "##{params[:q]}"
-            results = $twitter.get_all_tweets("##{params[:q]}")
-            logger.debug results.size.to_s
-            render :json => { count: results.size, hashtag: params[:q] }
+            query = params[:q]
+            hashtag = nil
+            exists = false
+            results = $twitter.get_all_tweets("##{query}")
+
+            if Hashtag.exists?(hashtag: query)
+                hashtag = Hashtag.find_by(hashtag: query)
+                exists = true
+            else
+                hashtag = Hashtag.new
+                hashtag.hashtag = query
+            end
+
+            hashtag.count = results.size
+            hashtag.save
+
+            hashtag.exist = exist
+
+            render :json => hashtag
         rescue Exception => e
             render :json => { message: e.message }, status: 500
         end
@@ -34,7 +49,10 @@ class HomeController < ApplicationController
 
     def remove
         begin
-
+            if Hashtag.exists?(id: params[:id])
+                hashtag = Hashtag.find_by(id: params[:id])
+                hashtag.destroy
+            end
             render :json => {}
         rescue Exception => e
             render :json => { message: e.message }, status: 500

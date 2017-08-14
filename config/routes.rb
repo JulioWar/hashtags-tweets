@@ -6,6 +6,6 @@ Rails.application.routes.draw do
 
   post "/hashtag", to: "home#add", as: "add"
 
-  delete "/hashtag", to: "home#remove", as: "remove"
+  delete "/hashtag/:id", to: "home#remove", as: "remove"
 
 end
