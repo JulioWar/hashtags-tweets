@@ -1,0 +1,37 @@
+<header>
+    <div class="app-container">
+        <h1>Diviertete buscando <strong>HASHTAG</strong>!</h1>
+        <h2>Guarda tus favoritos</h2>
+        <div class="autocomplete" >
+            <input type="text" v-model="selection" placeholder="Buscar" class="search"
+            @keydown.enter = 'enter'>
+            <button type="button" @click="enter()" :disabled="processing" name="button">
+                <span v-if="processing">Processando...</span>
+                <span v-else>Agregar</span>
+            </button>
+        </div>
+    </div>
+</header>
+<div class="app-container">
+    <div class="hashtags">
+        <div class="alert" :class="{ 'hidden': !alert }">
+            <span class="close" @click="closeAlert()"></span>
+            {{ message }}
+        </div>
+        <div class="hashtag hastag-header">
+            <h3 class="name"><span class="pull-right">Apariciones</span> HASHTAG</h6>
+        </div>
+        <div class="alert alert-gray text-center mt-2" :class="{ 'hidden': !loading }">
+            Cargando...
+        </div>
+        <div class="hashtag" v-for="hashtag in hashtags">
+            <h4 class="name">
+                <span class="count pull-right">{{ hashtag.count }} </span>
+                {{ (!hashtag.disabled) ? hashtag.hashtag : 'eliminando...'}}
+            </h6>
+            <button class="btn-remove" :disabled="hashtag.disabled" @click="removeHashtag(hashtag)">
+                <i class="close"></i>
+            </button>
+        </div>
+    </div>
+</div>
