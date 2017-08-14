@@ -3,18 +3,29 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
 
+/*
+    INDICE
+    - ESTILO GENERAL
+    - CLASES GENERICAS
+    - ESTILO DE LA APLICACION
+    - MEDIA QUERIES
+ */
+
+/* ESTILO GENERAL */
 html, body,#app {
     height: 100%;
 }
 body {
     margin: 0;
     background-color: #f6f6f6;
+
     & *, &:before {
         font-family: 'Montserrat', cursive;
     }
+
     &:before {
         position: absolute;
-        right: 10px;
+        right: 33px;
         top: 10px;
         z-index: 12;
         color: white;
@@ -23,15 +34,26 @@ body {
         content: 'Designed by JulioWar';
     }
 }
+
 button {
     border: none;
 }
+
+/* CLASES GENERALES */
+.clickable {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .mt-2 {
     margin-top: 20px;
 }
+
 .text-center {
     text-align: center;
 }
+
 .pull-right {
     float: right;
 }
@@ -89,6 +111,7 @@ button {
     }
 }
 
+/* ESTILO DE LA APLICACION */
 #app {
     position: relative;
     overflow: auto;
@@ -102,6 +125,7 @@ button {
             height: 100%;
             position: relative;
         }
+
         h1,h2 {
             text-align: center;
             transition: transform 0.2s ease-in-out;
@@ -109,12 +133,14 @@ button {
                 transform: scale(1.1);
             }
         }
+
         h1 {
             color: white;
             margin-top: 0;
             margin-bottom: 0;
             padding-top: 60px;
         }
+
         h2 {
             margin-top: 5px;
             color: black;
@@ -170,6 +196,7 @@ button {
                 font-weight: bold;
                 font-size: 16px;
                 transition: right 0.3s ease-in-out;
+
                 &:hover, &[disabled=disabled] {
                     cursor: pointer;
                     opacity: 0.5;
@@ -204,13 +231,16 @@ button {
             .name {
                 margin: 0;
             }
+
             .count {
                 opacity: 1;
                 transition: opacity 0.2s ease-in-out;
             }
+
             .badge {
                 float: right;
             }
+
             .btn-remove {
                 position: absolute;
                 right: -60px;
@@ -225,6 +255,7 @@ button {
                 &:hover {
                     cursor: pointer;
                 }
+
                 .close {
                     width: 20px;
                     height: 20px;
@@ -245,6 +276,7 @@ button {
                 .count {
                     opacity: 0;
                 }
+
                 .btn-remove {
                     right: 20px;
                 }
@@ -259,6 +291,7 @@ button {
 
 }
 
+/* MEDIA QUERIES */
 @media (max-width: 992px) {
     .app-container {
         width: auto !important;

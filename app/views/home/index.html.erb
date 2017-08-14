@@ -24,6 +24,9 @@
         <div class="alert alert-gray text-center mt-2" :class="{ 'hidden': !loading }">
             Cargando...
         </div>
+        <div class="alert alert-gray text-center mt-2 clickable" @click="refreshHashtags()" :class="{ 'hidden': !error }">
+            Haz click aqui para intentar cargar los hashtags.
+        </div>
         <div class="hashtag" v-for="hashtag in hashtags">
             <h4 class="name">
                 <span class="count pull-right">{{ hashtag.count }} </span>
