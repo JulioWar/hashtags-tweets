@@ -6,76 +6,61 @@ document.addEventListener('turbolinks:load', () => {
         el: element,
         data() {
             return {
+                url: '/hashtag',
                 selection: '',
-                open: false,
-                current: -1,
+                message: '',
+                alert: false,
+                processing: false,
+                previousRequest: null,
                 hashtags: [],
-                suggestions: [
-                    {
-                        hashtag: 'bestcart',
-                        count: 20
-                    },
-                    {
-                        hashtag: 'hashtag',
-                        count: 30
-                    }
-                ]
             };
         },
-        computed: {
-            matches() {
-                return this.suggestions.filter((obj) => {
-                    return obj.hashtag.indexOf(this.selection) >= 0;
-                });
-            },
-            openSuggestion() {
-                return this.selection !== "" &&
-                       this.matches.length != 0 &&
-                       this.open === true;
+        watch: {
+            selection() {
+                this.selection = this.selection.replace(/\s+/g, '');
             }
         },
         methods: {
-            //When enter pressed on the input
+            closeAlert() {
+                this.alert = false;
+            },
+            removeHashtag() {
+                this.$http.delete(this.url.)
+            },
             enter() {
-                this.suggestionClick(this.current);
-            },
+                if (!this.selection) return;
 
-            //When up pressed while suggestions are open
-            up() {
-                if(this.current > 0)
-                    this.current--;
-            },
+                this.processing = true;
+                this.$http.get(this.hashtag + '?q=' + this.selection, {
+                        before(request) {
+                            if (this.previousRequest) {
+                                this.previousRequest.abort();
+                            }
 
-            //When up pressed while suggestions are open
-            down() {
-                if(this.current < this.matches.length - 1)
-                    this.current++;
-            },
-
-            //For highlighting element
-            isActive(index) {
-                return index === this.current;
-            },
-
-            //When the user changes input
-            change() {
-                if (this.open == false) {
-                    this.open = true;
-                    this.current = 0;
-                }
-            },
-
-            //When one of the suggestion is clicked
-            suggestionClick(index) {
-                this.selection = this.matches[index].hashtag;
-                this.hashtags.push(Object.assign({},this.matches[index]));
-                console.log(this.hashtags);
-                this.open = false;
-            },
-
-            sayHello() {
-                this.open = !this.open;
+                            this.previousRequest = request;
+                        }
+                    })
+                    .then(
+                        (response) => {
+                            console.log(response);
+                            if (!response.data.exist) {
+                                this.hashtags.push(response.data);
+                            }
+                            this.processing = false;
+                        },
+                        (response) => {
+                            const body = response.body;
+                            if (body.message) {
+                                this.message = body.message;
+                            } else {
+                                this.message = response.statusText;
+                            }
+                            this.alert = true;
+                            this.processing = false;
+                        }
+                    );
             }
+
         },
         mounted() {
             console.log('Hello World', this );
