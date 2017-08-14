@@ -1,19 +1,5 @@
-
-def collect_with_max_id(collection=[], max_id=nil, &block)
-  response = yield(max_id)
-  collection += response
-  response.empty? ? collection.flatten : collect_with_max_id(collection, response.last.id - 1, &block)
-end
-
-def $twitter.get_all_tweets(query)
-  collect_with_max_id do |max_id|
-    options = {count: 200, include_rts: true}
-    options[:max_id] = max_id unless max_id.nil?
-    search(query, options).collect.to_a
-  end
-end
-
 class HomeController < ApplicationController
+
     def index
     end
 
@@ -39,9 +25,12 @@ class HomeController < ApplicationController
             hashtag.count = results.size
             hashtag.save
 
-            hashtag.exist = exist
-
-            render :json => hashtag
+            render :json => {
+                id: hashtag.id,
+                hashtag: hashtag.hashtag,
+                count: hashtag.count,
+                exist: exists
+            }
         rescue Exception => e
             render :json => { message: e.message }, status: 500
         end

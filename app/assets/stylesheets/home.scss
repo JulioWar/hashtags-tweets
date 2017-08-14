@@ -9,8 +9,18 @@ html, body,#app {
 body {
     margin: 0;
     background-color: #f6f6f6;
-    & * {
+    & *, &:before {
         font-family: 'Montserrat', cursive;
+    }
+    &:before {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 12;
+        color: white;
+        opacity: 0.8;
+        font-weight: bold;
+        content: 'Designed by JulioWar';
     }
 }
 button {
@@ -114,9 +124,9 @@ button {
             position:absolute;
             content:  '';
             background-color: #ddd;
-            background-image: url('//p6.zdassets.com/hc/theme_assets/138842/200037786//pattern_transparent.png'),
+            background-image: url('pattern.png'),
                               linear-gradient(-145deg, #ffe628 -20%, #ad6013 87%);
-            background-size: 380px, contain;
+            background-size: 269px, contain;
             top: 0;
             left: 0;
             width: 100%;
@@ -142,6 +152,9 @@ button {
                 &:focus {
                     transform: scale(1.01);
                     box-shadow: 0 2px 10px rgba(black,0.3);
+                    & ~ button {
+                        right: -5px;
+                    }
                 }
             }
 
@@ -184,7 +197,6 @@ button {
             overflow: hidden;
             border-radius: 0;
             transition: all 0.2s ease-in-out;
-            clear: both;
             padding: 30px 20px;
             border-bottom: 1px solid #ddd;
             position: relative;
@@ -209,11 +221,9 @@ button {
                 border-radius: 10px;
                 padding: 10px;
                 transition: all 0.2s ease-in-out;
-                opacity: 0.8;
 
-                &:hover:not([disabled=disabled]) {
+                &:hover {
                     cursor: pointer;
-                    opacity: 1;
                 }
                 .close {
                     width: 20px;

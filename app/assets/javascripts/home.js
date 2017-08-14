@@ -29,7 +29,9 @@ document.addEventListener('turbolinks:load', () => {
             enter() {
                 if (!this.selection) return;
 
+                this.alert = false;
                 this.processing = true;
+
                 this.$http.post(this.url, { q: this.selection }, {
                         before(request) {
                             if (this.previousRequest) {
@@ -44,7 +46,17 @@ document.addEventListener('turbolinks:load', () => {
                             console.log(response);
                             if (!response.data.exist) {
                                 this.hashtags.push(response.data);
+                            } else {
+
+                                for (let i = 0; i < this.hashtags.length; i++) {
+                                    if (this.hashtags[i].id == response.data.id) {
+                                        this.hashtags[i] = response.data;
+                                        break;
+                                    }
+                                }
+
                             }
+
                             this.processing = false;
                         },
                         (response) => {
