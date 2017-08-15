@@ -16,8 +16,6 @@ rails db:migrate
 rails s
 ```
 
-
-
 ### NOTAS
 - Esta aplicacion solamente ha sido probada en un ambiente windows.
-- Dependiendo del hashtag ingresado puede ser que el request se caiga porque las limitaciones del API de Twitter.
+- Dependiendo del hashtag ingresado puede ser que el request se caiga por las limitaciones del API de Twitter.
